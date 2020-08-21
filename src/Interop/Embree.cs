@@ -207,17 +207,11 @@ namespace RaytracerNativeLibs.Interop
             tnear = near;
             tfar = float.MaxValue;
 
-            time = 0;
+            time = 0f;
             mask = uint.MaxValue;
             id = 0;
             flags = 0;
         }
-
-        public Vector3 Origin => new Vector3(orgX, orgY, orgZ);
-
-        public Vector3 Direction => new Vector3(dirX, dirY, dirZ);
-
-        public Vector3? Hit => tfar < float.MaxValue ? Origin + Direction * tfar : new Vector3?();
     }
 
     public struct RTCHit
@@ -234,10 +228,11 @@ namespace RaytracerNativeLibs.Interop
         public int instID;
     }
 
+    [StructLayout(LayoutKind.Explicit, Size = 80)]
     public struct RTCRayHit
     {
-        public RTCRay ray;
-        public RTCHit hit;
+        [FieldOffset(0)] public RTCRay ray;
+        [FieldOffset(48)] public RTCHit hit;
     }
 
 
@@ -245,40 +240,40 @@ namespace RaytracerNativeLibs.Interop
     {
         public const string DLLName = "embree3.dll";
 
-        [SuppressUnmanagedCodeSecurity, DllImport(DLLName, CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(DLLName, CallingConvention = CallingConvention.Cdecl)]
         public static extern IntPtr rtcNewDevice(string config);
 
-        [SuppressUnmanagedCodeSecurity, DllImport(DLLName, CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(DLLName, CallingConvention = CallingConvention.Cdecl)]
         public static extern void rtcReleaseDevice(IntPtr device);
 
-        [SuppressUnmanagedCodeSecurity, DllImport(DLLName, CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(DLLName, CallingConvention = CallingConvention.Cdecl)]
         public static extern IntPtr rtcNewScene(IntPtr device);
 
-        [SuppressUnmanagedCodeSecurity, DllImport(DLLName, CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(DLLName, CallingConvention = CallingConvention.Cdecl)]
         public static extern void rtcReleaseScene(IntPtr scene);
 
-        [SuppressUnmanagedCodeSecurity, DllImport(DLLName, CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(DLLName, CallingConvention = CallingConvention.Cdecl)]
         public static extern IntPtr rtcNewGeometry(IntPtr device, RTCGeometryType type);
 
-        [SuppressUnmanagedCodeSecurity, DllImport(DLLName, CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(DLLName, CallingConvention = CallingConvention.Cdecl)]
         public static extern void rtcReleaseGeometry(IntPtr geometry);
 
-        [SuppressUnmanagedCodeSecurity, DllImport(DLLName, CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(DLLName, CallingConvention = CallingConvention.Cdecl)]
         public static extern void rtcCommitGeometry(IntPtr geometry);
 
-        [SuppressUnmanagedCodeSecurity, DllImport(DLLName, CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(DLLName, CallingConvention = CallingConvention.Cdecl)]
         public static extern uint rtcAttachGeometry(IntPtr scene, IntPtr geometry);
 
-        [SuppressUnmanagedCodeSecurity, DllImport(DLLName, CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(DLLName, CallingConvention = CallingConvention.Cdecl)]
         public static extern void rtcCommitScene(IntPtr scene);
 
-        [SuppressUnmanagedCodeSecurity, DllImport(DLLName, CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(DLLName, CallingConvention = CallingConvention.Cdecl)]
         public static extern void rtcSetSharedGeometryBuffer(IntPtr geometry, RTCBufferType type, uint slot, RTCFormat format, IntPtr ptr, uint byteOffset, uint byteStride, uint itemCount);
 
-        [SuppressUnmanagedCodeSecurity, DllImport(DLLName, CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(DLLName, CallingConvention = CallingConvention.Cdecl)]
         public static extern void rtcIntersect1(IntPtr scene, ref RTCIntersectContext context, ref RTCRayHit rayhit);
 
-        [SuppressUnmanagedCodeSecurity, DllImport(DLLName, CallingConvention = CallingConvention.Cdecl)]
+        [DllImport(DLLName, CallingConvention = CallingConvention.Cdecl)]
         public static extern void rtcOccluded1(IntPtr scene, ref RTCIntersectContext context, ref RTCRay ray);
 
     }

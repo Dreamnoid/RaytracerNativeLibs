@@ -38,7 +38,7 @@ namespace RaytracerNativeLibs
 					var g = outputArray[index * 4 + 1];
 					var b = outputArray[index * 4 + 2];
 					var a = outputArray[index * 4 + 3];
-					buffer[index] = new Vector4(r, g, b, a);
+					buffer[index] = new Vector4(r, g, b, buffer[index].W);
 				}
 			}
 		}
